@@ -1,3 +1,7 @@
+# run by using following command:
+#    sudo python word2vec_NDD_mod.py csv_file_name.csv > word2vec_NDD_mod.txt
+# csv_file_name.csv should have text as the column header
+
 from time import time  # To time operations
 from collections import defaultdict  # For word frequency
 from gensim.models.phrases import Phrases, Phraser
@@ -17,6 +21,8 @@ from pandas import read_csv, DataFrame
 from numpy import nan, str, zeros, vstack, array
 from re import sub
 import gc
+
+
 
 og_embedding = 'word2vec_twitter_tokens_getit_actual.bin' # should be bin
 custom_embedding = 'w2v_model_pubmed_opinion_sk_5_5.p'
