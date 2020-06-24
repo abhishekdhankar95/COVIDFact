@@ -23,11 +23,13 @@ cause_phrase_filename = 'cause_phrases.p'
 prevent_phrase_filename = 'prevent_phrases.p'
 treatment_phrase_filename = 'treatment_phrases.p'
 
-def causes_word_list():
-	for word in 
-	
+'''
+word = can only be one of {cure, prevention, treatment}
+return a list with ungrams and bi_grams which correspond cure, prevention or treatment
+'''
 def get_phrases(word:str):
 	phrase_list = []
+	
 	if word=='cause':
 		phrase_list.extend(cause_word_list)
 		cause_phrases = pickle.load(open(cause_phrase_filename, 'rb'))
