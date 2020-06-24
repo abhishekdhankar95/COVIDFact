@@ -24,7 +24,7 @@ prevent_phrase_filename = 'prevent_phrases.p'
 treatment_phrase_filename = 'treatment_phrases.p'
 
 '''
-word = can only be one of {cure, prevention, treatment}
+word = can only be one of {cure, prevent, treat}
 return a list with ungrams and bi_grams which correspond cure, prevention or treatment
 '''
 def get_phrases(word:str):
