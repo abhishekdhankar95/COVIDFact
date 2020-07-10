@@ -41,11 +41,11 @@ def conversion(training_data_csv, vector_csv):
 #vector_csv = 'training_data_vector_new_combined_10.csv'
 
 #og_encoder = api.load("word2vec-google-news-300")
-og_encoder = KeyedVectors.load_word2vec_format('E:/embeddings_twitter_pet/word2vec_twitter_tokens_getit_actual.bin', binary=True, unicode_errors='ignore')
+og_encoder = KeyedVectors.load_word2vec_format('word2vec_twitter_tokens_getit_actual.bin', binary=True, unicode_errors='ignore')
 #encoder = load(open('w2v_model_google_true.p', 'rb'))
-encoder = load(open('E:/embeddings_twitter_pet/w2v_model_pubmed_opinion_sk_5_5.p', 'rb'))
+#encoder = load(open('E:/embeddings_twitter_pet/w2v_model_pubmed_opinion_sk_5_5.p', 'rb'))
 #nn_model = load(open('trained_regressor_google_combined.p', 'rb'))
-nn_model = load(open('E:/embeddings_twitter_pet/trained_regressor_model_pubmed_opinion_sk_5_5.p', 'rb'))
+#nn_model = load(open('E:/embeddings_twitter_pet/trained_regressor_model_pubmed_opinion_sk_5_5.p', 'rb'))
 
 
 data_filename = 'updated_train.csv'
