@@ -16,6 +16,9 @@ from sklearn.linear_model import LinearRegression
 from sklearn.linear_model import LogisticRegression
 from sklearn.neural_network import MLPClassifier
 from sklearn.model_selection import ShuffleSplit
+from sklearn.model_selection import GridSearchCV
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.naive_bayes import GaussianNB
 
 def conversion(training_data_csv, vector_csv):
 	training_data_csv.dropna(inplace=True)
@@ -51,41 +54,30 @@ data_filename = 'tweets_health_curated_list_mod.csv'
 training_data_filename = 'training_data_sick.csv'
 testing_data_filename = 'testing_data_sick.csv'
 
-vector_traindata_final = 'trainset_final_sick.csv'
+vector_data_final = 'vector_data_og.csv'
 vector_testdata_final = 'testset_final_sick.csv'
 
-df = read_csv(data_filename)
-rs = ShuffleSplit(n_splits=1, test_size=0.20, random_state=0)
-train_indices = []
-test_indices = []
-for train_index, test_index in rs.split(list(df.index)):
-	train_indices = train_index
-	test_indices = test_index
-
-df.iloc[train_indices].to_csv(training_data_filename, columns=['id', 'text', 'label'], index=False)
-df.iloc[test_indices].to_csv(testing_data_filename, columns=['id', 'text', 'label'], index=False)
 
 # remove this when done
 df = DataFrame(columns=['vector', 'label'])
-df.to_csv(vector_traindata_final, index=False)
-df.to_csv(vector_testdata_final, index=False)
+df.to_csv(vector_data_final, index=False)
 
 
 def encode(tokens, label=None):
 	X = []
 	y = []
 	for token in tokens:
+		if token in og_encoder.vocab:
+			X.append(og_encoder[token])
+			y.append(label)
+		
 		#if token in og_encoder.vocab:
-		#	X.append(og_encoder[token])
+		#	X.append(nn_model.predict(og_encoder[token].reshape(1, -1))[0])
 		#	y.append(label)
 		
-		if token in og_encoder.vocab:
-			X.append(nn_model.predict(og_encoder[token].reshape(1, -1))[0])
-			y.append(label)
-		
-		elif token in encoder.wv.vocab:
-			X.append(encoder.wv.get_vector(token))
-			y.append(label)
+		#elif token in encoder.wv.vocab:
+		#	X.append(encoder.wv.get_vector(token))
+		#	y.append(label)
 		
 		#else:
 		#	#print(encoder.vector_size)
@@ -117,14 +109,13 @@ def convert_str_dataframe(df_vector, X, y):
 
 if __name__=='__main__':
 	
+	training_data_csv = read_csv(data_filename, usecols=['id', 'text', 'label'], dtype={'id':str, 'desc':str, 'label':str})	
+	#testing_data_csv = read_csv(testing_data_filename)
+	#training_data_csv.label = 1-training_data_csv.label
 	
-	training_data_csv = read_csv(training_data_filename)
-	testing_data_csv = read_csv(testing_data_filename)
+	conversion(training_data_csv, vector_data_final)
+	#conversion(testing_data_csv, vector_testdata_final)
 	
-	
-	conversion(training_data_csv, vector_traindata_final)
-	conversion(testing_data_csv, vector_testdata_final)
-
 
 	#lst_string = training_data_vector_shuffle[~training_data_vector_shuffle.vector.str.contains('nan')]
 	X_train = []
@@ -132,39 +123,52 @@ if __name__=='__main__':
 	X_test = []
 	y_test = []
 	
-	training_data_vector_training_shuffle = read_csv(vector_traindata_final)
-	training_data_vector_testing_shuffle = read_csv(vector_testdata_final)
+	training_data_vector_training_shuffle = read_csv(vector_data_final)
+	#training_data_vector_testing_shuffle = read_csv(vector_testdata_final)
 	
 	convert_str_dataframe(training_data_vector_training_shuffle, X_train, y_train)
-	convert_str_dataframe(training_data_vector_testing_shuffle, X_test, y_test)
-
-
-	print(np.array(X_train).shape)
-	print(np.array(y_train).shape)
-	print(np.array(X_test).shape)
-	print(np.array(y_test).shape)
-	print(type(np.array(X_train)[0][0]))
-	print(training_data_vector_testing_shuffle.shape)
-	
-	C = 1.5
-	print(C)
-	
-	clf = svm.SVC(C=C, gamma='scale', kernel='rbf')
+	#convert_str_dataframe(training_data_vector_testing_shuffle, X_test, y_test)
+	'''
+	parameters = {'kernel':['rbf'], 'C':[10]}
+	svc = svm.SVC(gamma='scale', probability=True, random_state=2)
+	clf = GridSearchCV(svc, parameters, cv=5, scoring=['precision_macro', 'recall_macro', 'f1_macro'], refit='precision_macro', verbose=10)
 	clf.fit(X_train, y_train)
-	print(clf.score(X_test, y_test))
+	#print(clf.score(X_test, y_test))
+	dump(clf, open('og_google.p', 'wb'))
+	'''
 	
 	'''
-	clf = LogisticRegression(random_state=0, C=C, solver='lbfgs', max_iter=10000).fit(X_train, y_train)
-	print(clf.score(X_test, y_test))
+	parameters = {'solver':['newton-cg', 'sag', 'saga', 'liblinear', 'lbfgs'], 'C':[0.0001, 0.001, 0.01, 0.1, 1, 10, 100, 1000, 10000], 'penalty':['l2']}
+	lr = LogisticRegression(random_state=2)
+	clf = GridSearchCV(lr, parameters, cv=5, scoring=['precision_macro', 'recall_macro', 'f1_macro'], refit='precision_macro', verbose=10)
+	clf.fit(X_train, y_train)
 	#print(clf.predict(X_test))
+	dump(clf, open('og_google.p', 'wb'))
 	'''
+	
+	'''
+	parameters = {'criterion':['gini', 'entropy'], 'n_estimators':[10, 100, 1000, 10000], 'random_state':[2]}
+	rfc = RandomForestClassifier()
+	clf = GridSearchCV(rfc, parameters, cv=5, scoring=['precision_macro', 'recall_macro', 'f1_macro'], refit='precision_macro', verbose=10)
+	clf.fit(X_train, y_train)
+	dump(clf, open('og_google.p', 'wb'))
+	'''
+	
+	parameters = {}
+	gnb = GaussianNB()
+	clf = GridSearchCV(gnb, parameters, cv=5, scoring=['precision_macro', 'recall_macro', 'f1_macro'], refit='precision_macro', verbose=10)
+	clf.fit(X_train, y_train)
+	dump(clf, open('og_google.p', 'wb'))
+	
 	'''
 	clf = MLPClassifier(hidden_layer_sizes=(300, 600, 300, 50 ), random_state=1, max_iter=3000).fit(X_train, y_train)
 	print(clf.loss_)
 	print(clf.score(X_test, y_test))
 	'''
+	
+	
 	#print(y_test)
-	print(precision_recall_fscore_support(y_test, clf.predict(X_test), labels=[0, 1]))
+	#print(precision_recall_fscore_support(y_test, clf.predict(X_test), labels=[0, 1]))
 	# df = np.array(encode(['virus', 'coronavirus', 'covid-19'])[0])
 	# print(np.average(df, axis=0))
 	
