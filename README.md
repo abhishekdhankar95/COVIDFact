@@ -8,7 +8,7 @@ Project Organization
     ├── data               <- Data files for use in training
     │
     ├── models             <- Trained and serialized models (pickle files)
-    
+    |
     ├── README.md          <- The top-level README for developers using this project
     │
     ├── covid_classify.py  <- Code for training classifier of COVID/non-COVID posts
@@ -20,8 +20,6 @@ Project Organization
     ├── med_non_med.py     <- Code for training classifier of medical/non-medical posts
     │
     ├── requirements.txt   <- For reproducing the analysis environment
-    │
-    ├── setup.py           <- Makes project pip installable
     │
     └── word2vec_train.py  <- Code for generating COVIDFact embeddings from abstracts
     
