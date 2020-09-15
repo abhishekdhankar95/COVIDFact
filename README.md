@@ -18,6 +18,8 @@ Project Organization
     ├── extract_phrases.py <- Code for extracting symptom & treatment phrases
     │
     ├── med_non_med.py     <- Code for training classifier of medical/non-medical posts
+    |
+    ├── reliable_unreliable_model_trainer.py <- Code for training reliable/unreliable model
     │
     ├── requirements.txt   <- For reproducing the analysis environment
     │
