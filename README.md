@@ -24,7 +24,11 @@ Project Organization
     ├── requirements.txt   <- For reproducing the analysis environment
     │
     └── word2vec_train.py  <- Code for generating COVIDFact embeddings from abstracts
-    
+
+Dependencies
+------------
+- Part of the code depends on the [Word2vec Twitter Tokens](https://drive.google.com/file/d/1HYCxleAkc1A2Pm-ND_kxU-Jy8Rlrvi46) file (Google Drive link provided due to large size of 4.6GB).
+
 --------
 
 <p><small>Project partially based on the <a target="_blank" href="https://drivendata.github.io/cookiecutter-data-science/">cookiecutter data science project template</a>.</small></p>
