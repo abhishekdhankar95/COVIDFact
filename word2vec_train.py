@@ -23,10 +23,12 @@ from re import sub
 import gc
 
 
+# File is over 4GB so link to it is provided in README.md and here to download
+# https://drive.google.com/file/d/1HYCxleAkc1A2Pm-ND_kxU-Jy8Rlrvi46
+og_embedding = 'word2vec_twitter_tokens_getit_actual.bin'
 
-og_embedding = 'word2vec_twitter_tokens_getit_actual.bin' # should be bin
-custom_embedding = 'w2v_model_pubmed_opinion_sk_5_5.p'
-augmented_embedding_neural_net = 'trained_regressor_model_pubmed_opinion_sk_5_5.p'
+custom_embedding = 'models/w2v_model_pubmed_opinion_sk_5_10.p'
+augmented_embedding_neural_net = 'models/trained_regressor_model_pubmed_opinion_sk_5_10.p'
 custom_embedding_text_data = sys.argv[1]
 
 def remove_tags(text):
@@ -48,7 +50,7 @@ def cleaning(doc):
         return ' '.join(txt)
 
 print("written header to temporary clean file")
-DataFrame(columns=['temp_clean']).to_csv('temporary_clean_text.csv', index=False, mode='w+')
+DataFrame(columns=['temp_clean']).to_csv('temporary_clean_text.csv', index=False, mode='w+') # File created by code
 
 print("read unprocessed text")
 df = read_csv(custom_embedding_text_data, encoding='utf-8')
@@ -104,8 +106,6 @@ w2v_model = Word2Vec(min_count=5,
                      window=5,
                      size=400,
                      sample=1e-5, 
-                     #alpha=0.03, 
-                     #min_alpha=0.0007, 
                      negative=3,
                      workers=cores,
                      sg=1,
@@ -125,26 +125,15 @@ w2v_model.init_sims(replace=True)
 
 pickle.dump(w2v_model, open(custom_embedding, "wb"))
 
-
-
-#w2v_model = pickle.load(open(custom_embedding, 'rb'))
-
-#word_vectors = api.load("word2vec-google-news-300")
 og_vocab = set(word_vectors.vocab)
 ndd_vocab = set(w2v_model.wv.vocab)
 og_ndd_intersection_vocab = og_vocab.intersection(ndd_vocab)
 mlp_regressor = nn.MLPRegressor(hidden_layer_sizes=(word_vectors.vector_size,), solver='sgd', max_iter=5000)
-#mlp_regressor.batch_size = 1
-#X = zeros(word_vectors.vector_size)
 X = []
-#y = zeros(word_vectors.vector_size)
 y = []
 for i in og_ndd_intersection_vocab:
-    #X = vstack((X, word_vectors.get_vector(i)))
     X.append(word_vectors.get_vector(i))
-    #y = vstack((y, w2v_model.wv.get_vector(i)))
     y.append(w2v_model.wv.get_vector(i))
-
 
 X = array(X)
 y = array(y)
