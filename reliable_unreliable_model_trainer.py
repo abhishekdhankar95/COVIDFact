@@ -34,9 +34,11 @@ def conversion(training_data_csv, vector_csv):
 		temp_df = DataFrame([[str(temp_df), datapoint.label]], columns=['vector', 'label'])
 		temp_df.to_csv(vector_csv, index=False, header=False, mode='a')
 
+# File is over 4GB so link to it is provided in README.md and here to download
+# https://drive.google.com/file/d/1HYCxleAkc1A2Pm-ND_kxU-Jy8Rlrvi46
 og_encoder = KeyedVectors.load_word2vec_format('word2vec_twitter_tokens_getit_actual.bin', binary=True, unicode_errors='ignore')
-encoder = load(open('embeddings/w2v_model_pubmed_opinion_sk_5_10.p', 'rb'))
-nn_model = load(open('embeddings/trained_regressor_model_pubmed_opinion_sk_5_10.p', 'rb'))
+encoder = load(open('models/w2v_model_pubmed_opinion_sk_5_10.p', 'rb'))
+nn_model = load(open('models/trained_regressor_model_pubmed_opinion_sk_5_10.p', 'rb'))
 
 data_filename = 'corona_training_data.csv'
 training_data_filename = 'corona_training_data.csv'
