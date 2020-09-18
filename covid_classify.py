@@ -37,7 +37,6 @@ def conversion(training_data_csv, vector_csv):
 
 og_encoder = KeyedVectors.load_word2vec_format('word2vec_twitter_tokens_getit_actual.bin', binary=True, unicode_errors='ignore')
 
-data_filename = 'data/zindi/updated_train.csv'
 training_data_filename = 'data/zindi/updated_train.csv'
 
 vector_traindata_final = 'trainset_final_sick.csv' # File will be created by code
