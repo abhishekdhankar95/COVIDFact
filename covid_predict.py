@@ -20,7 +20,6 @@ from sklearn.model_selection import GridSearchCV
 
 def conversion(training_data_csv, vector_csv):
 	training_data_csv.dropna(inplace=True)
-	# brief_cleaning = (sub("[^A-Za-z]+", ' ', str(row)).lower() for row in df_temp_clean['temp_clean'])
 	
 	for index, datapoint in training_data_csv.iterrows():
 		temp_list = []
@@ -35,11 +34,6 @@ def conversion(training_data_csv, vector_csv):
 		temp_df.to_csv(vector_csv, index=False, header=False, mode='a')
 
 
-# google only modification 
-# google only csvs ok
-
-#vector_csv = 'training_data_vector_new_combined_10.csv'
-
 og_encoder = KeyedVectors.load_word2vec_format('E:/embeddings_twitter_pet/word2vec_twitter_tokens_getit_actual.bin', binary=True, unicode_errors='ignore')
 
 classifier_pickle = 'covid_classifier_rbf_87.p'
@@ -47,21 +41,6 @@ predict_text_filename = 'updated_test.csv' # this is the filw which should have 
 vector_data = 'temp_text_vector.csv'
 prediction_filename = 'prediction.csv'
 
-'''
-df = read_csv(data_filename)
-rs = ShuffleSplit(n_splits=1, test_size=0.20, random_state=0)
-train_indices = []
-test_indices = []
-for train_index, test_index in rs.split(list(df.index)):
-	train_indices = train_index
-	test_indices = test_index
-
-del df
-#df.iloc[train_indices].to_csv(training_data_filename, columns=['id', 'text', 'label'], index=False)
-#df.iloc[test_indices].to_csv(testing_data_filename, columns=['id', 'text', 'label'], index=False)
-'''
-
-# remove this when done
 df_temp = DataFrame(columns=['vector'])
 df_temp.to_csv(vector_data, index=False)
 del df_temp
@@ -73,19 +52,6 @@ def encode(tokens, label=None):
 		if token in og_encoder.vocab:
 			X.append(og_encoder[token])
 			y.append(label)
-		
-		#if token in og_encoder.vocab:
-		#	X.append(nn_model.predict(og_encoder[token].reshape(1, -1))[0])
-		#	y.append(label)
-		
-		#elif token in encoder.wv.vocab:
-		#	X.append(encoder.wv.get_vector(token))
-		#	y.append(label)
-		
-		#else:
-		#	#print(encoder.vector_size)
-		#	X.append(np.zeros(encoder.vector_size))
-		#	y.append(-1)
 	if not X:
 		df = np.zeros(encoder.vector_size)
 		return df
@@ -97,7 +63,6 @@ def encode(tokens, label=None):
 
 def tokenize(sentence):
 	tokens = word_tokenize(sentence)
-	# tokens = [t1.lower() for t1 in tokens if t1 not in punctuation] # Remove punctuations & stop words using Glasgow stop words list
 	return tokens
 	
 def convert_str_dataframe(df_vector, X):
@@ -121,12 +86,5 @@ def predict_text():
 	DataFrame(y_test, columns=['prediction']).prediction], axis=1)\
 	.to_csv(prediction_filename, index=False, header=['text', 'prediction'])
 	
-
 if __name__=='__main__':
 	predict_text()
-	
-
-
-
-
-
