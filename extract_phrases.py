@@ -9,19 +9,9 @@ treatment_word_list = ['treatment', 'treated', 'treats', 'treat', 'treating', 't
 cause_word_list = ['aethiology', 'aetiology', 'etiology', 'causes', 'cause', 'caused', 'causing', 'aitiology', 'causality', 'causal', 'causation', 'causativity', 'causative', 'causable', 'causability', 'induce']
 prevent_word_list = ['preventable', 'prevent', 'prevents', 'preventing', 'prevented', 'preventability', 'preventible', 'preventiveness', 'preventive', 'prevention', 'prophylaxis', 'prophylax', 'prophylactic', 'prophylaxis']
 
-'''
-#filename = 'medical_datasets/prevent_word_list.p'
-#filename = 'medical_datasets/cause_word_list.p'
-filename = 'medical_datasets/treatment_word_list.p'
-text = pickle.load(open(filename, 'rb'))
-text_bigrams = [ngrams(sent, 2) for sent in text]
-text_unigrams = [ngrams(sent, 1) for sent in text]
-ngram_counts = NgramCounter(text_bigrams + text_unigrams)
-pickle.dump(ngram_counts, open('treatment_phrases.p', 'wb'))
-'''
-cause_phrase_filename = 'cause_phrases.p'
-prevent_phrase_filename = 'prevent_phrases.p'
-treatment_phrase_filename = 'treatment_phrases.p'
+cause_phrase_filename = 'models/cause_phrases.p'
+prevent_phrase_filename = 'models/prevent_phrases.p'
+treatment_phrase_filename = 'models/treatment_phrases.p'
 
 '''
 word = can only be one of {cure, prevent, treat}
@@ -49,5 +39,3 @@ def get_phrases(word:str):
 			phrase_list.extend([word + _ for _ in list(treatment_phrases[[word]])])
 	
 	return phrase_list
-
-
