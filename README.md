@@ -28,7 +28,7 @@ Project Organization
 Dependencies
 ------------
 - Part of the code depends on the [Word2vec Twitter Tokens](https://drive.google.com/file/d/1HYCxleAkc1A2Pm-ND_kxU-Jy8Rlrvi46) file (Google Drive link provided due to large size of 4.6GB).
-
+- To install all Python libraries and modules needed, please run `pip install -r requirements.txt`
 --------
 
 <p><small>Repository structure partially based on the <a target="_blank" href="https://drivendata.github.io/cookiecutter-data-science/">cookiecutter data science project template</a>.</small></p>
