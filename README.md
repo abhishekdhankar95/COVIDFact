@@ -21,7 +21,7 @@ Project Organization
     |
     ├── reliable_unreliable_model_trainer.py <- Code for training reliable/unreliable model
     │
-    ├── requirements.txt   <- For reproducing the analysis environment (run `pip install -r requirements.txt`)
+    ├── requirements.txt   <- For reproducing the analysis environment (run pip install -r requirements.txt)
     │
     └── word2vec_train.py  <- Code for generating COVIDFact embeddings from abstracts
 
